@@ -1,4 +1,5 @@
 import time
+import webbrowser
 from pathlib import Path
 
 from selenium import webdriver
@@ -53,4 +54,7 @@ def after_scenario(context, scenario):
 
 
 def after_all(context):
-    context.report.write(Path("report.html"))
+    report_path = Path("report.html").resolve()
+    context.report.write(report_path)
+    if context.config.userdata.getbool("open_report", True):
+        webbrowser.open(report_path.as_uri())
