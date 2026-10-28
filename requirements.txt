@@ -1,0 +1,4 @@
+selenium>=4.20
+behave>=1.2.6
+behave-html-formatter>=0.9.10
+requests>=2.31
