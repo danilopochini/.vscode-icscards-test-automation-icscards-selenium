@@ -25,10 +25,17 @@ def _create_driver(userdata):
     return driver_cls(options=options)
 
 
+ENVIRONMENTS = {"qa": "https://www.qa.icscards.nl", "prod": "https://www.icscards.nl"}
+
+
 def before_all(context):
-    context.base_url = context.config.userdata.get("base_url", "https://www.icscards.nl")
+    env = context.config.userdata.get("env", "qa").lower()
+    if env not in ENVIRONMENTS:
+        raise ValueError(f"Unknown env '{env}'; choose one of: {', '.join(ENVIRONMENTS)}")
+    # An explicit base_url wins over env
+    context.base_url = context.config.userdata.get("base_url", ENVIRONMENTS[env])
     context.slowmo = float(context.config.userdata.get("slowmo", 0))
-    context.report = Report()
+    context.report = Report(context.base_url)
 
 
 def before_scenario(context, scenario):

@@ -47,8 +47,9 @@ document.getElementById('lb').onclick=function(){this.style.display='none'}
 
 
 class Report:
-    def __init__(self):
+    def __init__(self, base_url: str):
         self.started = datetime.now()
+        self.base_url = base_url.rstrip("/")
         self.scenarios = []
         self.current = None
 
@@ -87,7 +88,7 @@ class Report:
         parts = [
             f"<!doctype html><meta charset='utf-8'><title>ICS Cards test report</title><style>{CSS}</style>",
             "<header><h1>ICS Cards - Selenium + behave report</h1>",
-            f"<p>{self.started:%d %b %Y %H:%M} &middot; https://www.icscards.nl</p></header><main>",
+            f"<p>{self.started:%d %b %Y %H:%M} &middot; {html.escape(self.base_url)}</p></header><main>",
             "<div class='cards'>",
             f"<div class='card'><span>Scenarios</span><b>{total}</b></div>",
             f"<div class='card pass'><span>Passed</span><b>{passed}</b></div>",

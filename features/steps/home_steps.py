@@ -1,6 +1,5 @@
 import re
 
-import requests
 from behave import given, then, when
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
@@ -77,7 +76,7 @@ def step_links(context, count):
     assert hrefs, "expected internal links on the home page"
     failures = []
     for href in hrefs[:count]:
-        response = requests.get(context.base_url + (href.split("#")[0] or "/"), timeout=30)
-        if response.status_code >= 400:
-            failures.append((href, response.status_code))
+        status = context.home.link_status(href)
+        if status == 0 or status >= 400:
+            failures.append((href, status))
     assert not failures, f"Broken links: {failures}"

@@ -30,11 +30,21 @@ class HomePage(BasePage):
         return self.wait().until(EC.visibility_of_element_located((By.CSS_SELECTOR, "h1")))
 
     def click_open_menu(self) -> None:
-        self.click((By.CSS_SELECTOR, "button[aria-label='Open menudialoog']"))
+        self.click(
+            (By.CSS_SELECTOR, "button[aria-label='Open menudialoog'], button[aria-label='Open menu dialog']")
+        )
 
     def visible_dialog(self) -> WebElement:
         locator = (By.CSS_SELECTOR, "dialog[open], [role='dialog']")
         return self.wait().until(EC.visibility_of_element_located(locator))
+
+    def link_status(self, href: str) -> int:
+        # fetch from within the page: the WAF blocks plain HTTP clients such as requests
+        return self.driver.execute_async_script(
+            "const done = arguments[arguments.length - 1];"
+            "fetch(arguments[0]).then(r => done(r.status)).catch(() => done(0));",
+            href.split("#")[0] or "/",
+        )
 
     def internal_links(self) -> list[str]:
         return self.driver.execute_script(

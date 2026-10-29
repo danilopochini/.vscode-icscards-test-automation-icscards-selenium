@@ -1,6 +1,6 @@
 # ICS Cards Selenium + Cucumber (behave) tests
 
-Python + Selenium + behave (Gherkin/Cucumber style) with the Page Object pattern, against https://www.icscards.nl.
+Python + Selenium + behave (Gherkin/Cucumber style) with the Page Object pattern, against QA (https://www.qa.icscards.nl, default) or production (`-D env=prod`).
 Same checks as the Playwright project in `../icscards-tests`.
 
 ## Setup
@@ -17,6 +17,8 @@ behave                          # all scenarios, headless, no pauses; report ope
 behave --tags=smoke             # smoke only
 behave -D headless=false -D slowmo=0.5  # visible browser with a 0.5 s pause per step
 behave -D browser=edge          # use Edge instead of Chrome
+behave -D env=prod              # test production (https://www.icscards.nl); default is qa
+behave -D base_url=https://example.test  # any other URL (overrides env)
 ```
 `report.html` opens automatically in your default browser after the run; add `-D open_report=false` to disable (e.g. on CI).
 
@@ -28,4 +30,4 @@ The report contains: summary cards, a pass-rate bar, Passed/Failed filters, and 
 - `features/environment.py` browser setup/teardown, slow-motion, per-step screenshots
 - `features/report_builder.py` generates the HTML report
 - `pages/` page objects (`BasePage`, `HomePage`)
-- `behave.ini` settings (base URL, browser, headless, slowmo)
+- `behave.ini` settings (env, browser, headless, slowmo)
